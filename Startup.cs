@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.SpaServices.Webpack;
 
 using TheWorld.Services;
 using TheWorld.Models;
@@ -39,9 +40,11 @@ namespace ToDoApp
             {
                 // Use a real mail service
             }
+
             services.AddDbContext<WorldContext>();
             services.AddScoped<IWorldRepository, WorldRepository>();
             services.AddTransient<WorldContextSeedData>();
+            
             services.AddMvc();
         }
 
@@ -55,6 +58,10 @@ namespace ToDoApp
             if (env.IsEnvironment("Development"))
             {
                 app.UseDeveloperExceptionPage();  // Show exception page
+                
+                // app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions {
+                //     HotModuleReplacement = true
+                // });
             }
             app.UseStaticFiles();
             app.UseMvcWithDefaultRoute();
