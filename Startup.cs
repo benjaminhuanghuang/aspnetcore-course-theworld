@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Formatters;
 
 using TheWorld.Services;
+using TheWorld.Models;
 
 namespace ToDoApp
 {
@@ -34,14 +35,19 @@ namespace ToDoApp
 
             if (_env.IsEnvironment("Development"))
                 services.AddScoped<IMailService, DebugMailService>();
-            else{
+            else
+            {
                 // Use a real mail service
             }
+            services.AddDbContext<WorldContext>();
+            services.AddScoped<IWorldRepository, WorldRepository>();
+            services.AddTransient<WorldContextSeedData>();
             services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env,
+                                ILoggerFactory loggerFactory, WorldContextSeedData seeder)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             // write Debug.Write into log
@@ -52,6 +58,8 @@ namespace ToDoApp
             }
             app.UseStaticFiles();
             app.UseMvcWithDefaultRoute();
+
+            seeder.EnsureSeedData().Wait();
         }
     }
 }
