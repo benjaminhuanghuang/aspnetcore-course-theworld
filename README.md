@@ -17,3 +17,9 @@
     * Seeding and Creating Database
     * Using the Repository Pattern
     * Logging
+
+## API
+    * Build on HTTP verbs
+    * Validation
+    * ViewModel mapping
+    * Using Services

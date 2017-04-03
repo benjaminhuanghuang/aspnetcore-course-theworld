@@ -9,6 +9,10 @@ using Microsoft.AspNetCore.SpaServices.Webpack;
 
 using TheWorld.Services;
 using TheWorld.Models;
+using TheWorld.ViewModels;
+
+using Newtonsoft.Json.Serialization;
+using AutoMapper;
 
 namespace ToDoApp
 {
@@ -44,10 +48,14 @@ namespace ToDoApp
             services.AddDbContext<WorldContext>();
             services.AddScoped<IWorldRepository, WorldRepository>();
             services.AddTransient<WorldContextSeedData>();
-            
+            services.AddTransient<GeoCoordsService>();
             services.AddLogging();
 
-            services.AddMvc();
+            // Use camel case when return result as json
+            services.AddMvc().AddJsonOptions(config =>
+            {
+                config.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,14 +68,23 @@ namespace ToDoApp
             if (env.IsEnvironment("Development"))
             {
                 app.UseDeveloperExceptionPage();  // Show exception page
-                
+
                 // app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions {
                 //     HotModuleReplacement = true
                 // });
             }
-            else{
+            else
+            {
 
             }
+            Mapper.Initialize(config =>
+            {
+                // Map enities to dto models
+                // Two way mapping
+                config.CreateMap<TripVM, Trip>().ReverseMap();
+                config.CreateMap<StopVM, Stop>().ReverseMap();
+
+            });
             app.UseStaticFiles();
             app.UseMvcWithDefaultRoute();
 
