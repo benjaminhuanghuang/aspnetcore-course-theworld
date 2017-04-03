@@ -34,6 +34,7 @@ namespace TheWorld.Controllers.Web
         [Authorize]
         public IActionResult Trips()
         {
+            /*
             try
             {
                 //var data = _context.Trips.ToList();
@@ -46,6 +47,9 @@ namespace TheWorld.Controllers.Web
                 _logger.LogError($"Failed to get trips in Index page:{exp.Message}");
                 return Redirect("/error");
             }
+             */
+             // Use Angular
+             return View();
         }
 
         public IActionResult Contact()
