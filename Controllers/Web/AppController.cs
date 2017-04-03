@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using TheWorld.Models;
 using Microsoft.Extensions.Logging;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TheWorld.Controllers.Web
 {
@@ -17,7 +18,7 @@ namespace TheWorld.Controllers.Web
         //private WorldContext _context;
         private IWorldRepository _repository;
         private ILogger _logger;
-        public AppController(IMailService mailService, IConfigurationRoot config, 
+        public AppController(IMailService mailService, IConfigurationRoot config,
             IWorldRepository repository, ILogger<AppController> logger)
         {
             _mailService = mailService;
@@ -27,22 +28,24 @@ namespace TheWorld.Controllers.Web
         }
         public IActionResult Index()
         {
-            try{
-            //var data = _context.Trips.ToList();
-            IEnumerable<Trip> data = NewMethod();
+            return View();
+        }
 
-            return View(data);
+        [Authorize]
+        public IActionResult Trips()
+        {
+            try
+            {
+                //var data = _context.Trips.ToList();
+                IEnumerable<Trip> trips = _repository.GetAllTrips();
+
+                return View(trips);
             }
-            catch(Exception exp)
+            catch (Exception exp)
             {
                 _logger.LogError($"Failed to get trips in Index page:{exp.Message}");
                 return Redirect("/error");
             }
-        }
-
-        private IEnumerable<Trip> NewMethod()
-        {
-            return _repository.GetAllTrips();
         }
 
         public IActionResult Contact()
@@ -62,7 +65,7 @@ namespace TheWorld.Controllers.Web
             {
                 var to = _config["MailSettings:ToAddress"];
                 _mailService.SendMail("ben@gmail.com", model.Email, "From TheWorld", model.Message);
-                
+
                 ModelState.Clear();
                 ViewBag.UserMessage = "Message Send";
             }

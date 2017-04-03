@@ -23,3 +23,8 @@
     * Validation
     * ViewModel mapping
     * Using Services
+
+## Identity
+    * Configuring Identity
+    * Storing Identity with EF
+    * Using Identity in the API
