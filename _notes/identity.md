@@ -47,3 +47,17 @@ public WorldContextSeedData(WorldContext context, UserManager<WorldUser> userMan
     <img src="~/img/user1.jpg" alt="headshot" class="headshot" />
     <span id="username">@User.Identity.Name</span>
 }
+
+## Use identity in API
+
+<PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="1.1.1" />
+
+[RouteAttribute("api/trips")]
+[Authorize]
+public class TripsController : Controller
+
+[Authorize] will return login page when call API
+ 
+ Fix it by adding:
+ config.Cookies.ApplicationCookie.Events = new CookieAuthenticationEvents()
+                {

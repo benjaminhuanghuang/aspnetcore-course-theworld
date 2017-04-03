@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TheWorld.Models;
@@ -10,6 +11,7 @@ using TheWorld.ViewModels;
 namespace TheWorld.Controllers.Api
 {
     [RouteAttribute("api/trips")]
+    [Authorize]
     public class TripsController : Controller
     {
         private IWorldRepository _repository;
