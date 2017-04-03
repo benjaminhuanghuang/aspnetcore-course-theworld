@@ -33,3 +33,10 @@ public WorldContextSeedData(WorldContext context, UserManager<WorldUser> userMan
 
 
     app.UseIdentity();
+
+## Login
+
+    public AuthController(SignInManager<WorldUser> signInManager)
+    {
+        _signInManager = signInManager;
+    }
