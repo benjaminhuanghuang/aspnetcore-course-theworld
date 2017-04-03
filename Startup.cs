@@ -13,6 +13,7 @@ using TheWorld.ViewModels;
 
 using Newtonsoft.Json.Serialization;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace ToDoApp
 {
@@ -44,6 +45,13 @@ namespace ToDoApp
             {
                 // Use a real mail service
             }
+
+            services.AddIdentity<WorldUser, IdentityRole>(config =>
+            {
+                config.User.RequireUniqueEmail = true;
+                config.Password.RequiredLength = 4;
+                config.Cookies.ApplicationCookie.LoginPath = "/Auth/Login";
+            }).AddEntityFrameworkStores<WorldContext>();
 
             services.AddDbContext<WorldContext>();
             services.AddScoped<IWorldRepository, WorldRepository>();
@@ -86,8 +94,16 @@ namespace ToDoApp
 
             });
             app.UseStaticFiles();
-            app.UseMvcWithDefaultRoute();
-
+            app.UseIdentity();
+            //app.UseMvcWithDefaultRoute();
+            app.UseMvc(config =>
+            {
+                config.MapRoute(
+                name: "Default",
+                template: "{controller}/{action}/{id?}",
+                defaults: new { controller = "App", action = "Index" }
+                );
+            });
             seeder.EnsureSeedData().Wait();
         }
     }
