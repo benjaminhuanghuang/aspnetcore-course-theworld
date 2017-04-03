@@ -28,3 +28,11 @@
     * Configuring Identity
     * Storing Identity with EF
     * Using Identity in the API
+
+
+## AngularJS 1
+    * Angular Modules
+    * Data Binding
+    * Views and Controllers
+    * Directives
+

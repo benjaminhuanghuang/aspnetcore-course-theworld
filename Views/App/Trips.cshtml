@@ -3,22 +3,51 @@
     ViewBag.Title = "Contace me";
 }
 
+@section scripts{
+    <script type="text/javascript" src="~/lib/angular/angular.min.js"></script>
+    <script type="text/javascript" src="~/js/app-trips.js"></script>
+    <script type="text/javascript" src="~/js/tripsController.js"></script>
+}
+<div class="row" ng-app="app-trips">
+    <div ng-controller="tripsController as vm" class="col-md-6 col-md-offset-3">
+        <table class="table table-responsive table-striped">
+            <tr ng-repeat="trip in vm.trips">
+                <td>{{trip.name}}</td>
+                <td>{{trip.created | date:'MM-dd-yyyy'}}</td>
+                <td><a href="#" class="btn btn-sm btn-primary">Manage</a></td>
 
-<div class="col-md-6"> 
-    <form action="">
-        <div class="form-group">
-            <label for="">Date</label>
-            <input type="text" class="form-control">
-        </div>
-        <div class="form-group">
-             <label for="">Location</label>
-            <input type="text" class="form-control">
-        </div>
-        <div><input type="submit" value="Add" class="btn btn-success"></div>
-    </form>
-</div>
-<div class="col-md-6"> 
-    @foreach(var item in Model){
-        <li>@item.Name : @item.DateCreated.ToString("d")</li>
-    }
+            </tr>
+        </table>
+        <form novalidate name="newTripForm" ng-submit="vm.addTrip()">
+            <div class="form-group">
+                <label for="name">Trip Name</label>
+                <input type="text" class="form-control" id = "name" name="name" ng-model="vm.newTrip.name" required ng-minlength="5"/>
+                <span ng-show="newTripForm.name.$error.required" class="text-warning"> Name is required.</span>
+                <span ng-show="newTripForm.name.$error.minlength" class="text-warning"> Name must be at least 5 characters.</span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Add" class="btn btn-success" ng-disabled="newTripForm.$invalid">
+            </div>
+        </form>
+    </div>
+    
+
+    <div class="col-md-6"> 
+        <form action="">
+            <div class="form-group">
+                <label for="">Date</label>
+                <input type="text" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="">Location</label>
+                <input type="text" class="form-control">
+            </div>
+            <div><input type="submit" value="Add" class="btn btn-success"></div>
+        </form>
+    </div>
+    <div class="col-md-6"> 
+        @foreach(var item in Model){
+            <li>@item.Name : @item.DateCreated.ToString("d")</li>
+        }
+    </div>
 </div>
