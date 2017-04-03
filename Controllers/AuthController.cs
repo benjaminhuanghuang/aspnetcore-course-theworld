@@ -51,5 +51,14 @@ namespace TheWorld.Controllers
             }
             return View();
         }
+
+        public async Task<IActionResult> Logout()
+        {
+            if(User.Identity.IsAuthenticated)
+            {
+                await _signInManager.SignOutAsync();
+            }
+            return RedirectToAction("Index", "App");
+        }
     }
 }

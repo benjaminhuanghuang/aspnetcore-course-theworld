@@ -40,3 +40,10 @@ public WorldContextSeedData(WorldContext context, UserManager<WorldUser> userMan
     {
         _signInManager = signInManager;
     }
+
+## UI
+@if (User.Identity.IsAuthenticated)
+{
+    <img src="~/img/user1.jpg" alt="headshot" class="headshot" />
+    <span id="username">@User.Identity.Name</span>
+}

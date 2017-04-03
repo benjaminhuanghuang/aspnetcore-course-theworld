@@ -14,6 +14,7 @@ using TheWorld.ViewModels;
 using Newtonsoft.Json.Serialization;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ToDoApp
 {
@@ -60,7 +61,14 @@ namespace ToDoApp
             services.AddLogging();
 
             // Use camel case when return result as json
-            services.AddMvc().AddJsonOptions(config =>
+            services.AddMvc(config =>{
+                //redirect request to https
+                if (_env.IsProduction())
+                {
+                    config.Filters.Add(new RequireHttpsAttribute());
+                }
+            })
+            .AddJsonOptions(config =>
             {
                 config.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             });
