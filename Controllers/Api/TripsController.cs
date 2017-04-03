@@ -22,6 +22,7 @@ namespace TheWorld.Controllers.Api
             _repository = repository;
             _logger = logger;
         }
+
         [HttpGetAttribute("")]
         // public JsonResult Get()   // Return Json can not return error 
         // {
@@ -31,8 +32,8 @@ namespace TheWorld.Controllers.Api
         {
             try
             {
-                var result = _repository.GetAllTrips();
-                return Ok(Mapper.Map<IEnumerable<TripVM>>(result));
+                var trips = _repository.GetUserTripsWithStops(User.Identity.Name);
+                return Ok(Mapper.Map<IEnumerable<TripVM>>(trips));
             }
             catch (Exception exp)
             {
@@ -48,6 +49,8 @@ namespace TheWorld.Controllers.Api
             {
                 // Save to database
                 var newTrip = Mapper.Map<Trip>(theTrip);
+                newTrip.UserName = User.Identity.Name;
+
                 _repository.AddTrip(newTrip);
                 if (await _repository.SaveChangesAsync())
                 {

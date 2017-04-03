@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,20 +25,47 @@ namespace TheWorld.Models
             return _context.Trips.ToList();
         }
 
-        public Trip GetTripByName(string tripName)
+        public Trip GetTripByName(string tripName, string userName)
         {
             return _context.Trips.Include(t => t.Stops)
-                                 .Where(t => t.Name == tripName)
+                                 .Where(t => t.Name == tripName && t.UserName == userName)
                                  .FirstOrDefault();
 
+        }
+        public IEnumerable<Trip> GetAllTripsWithStops()
+        {
+            try{
+             return _context.Trips.Include(t => t.Stops)
+                                .OrderBy(t=>t.Name)
+                                .ToList();
+            }
+            catch (Exception exp)
+            {
+                 _logger.LogError("Can not get trips with stops from database", exp);
+                return null;
+            }
+        }
+        public IEnumerable<Trip> GetUserTripsWithStops(string userName)
+        {
+            try{
+             return _context.Trips.Include(t => t.Stops)
+                                .OrderBy(t=>t.Name)
+                                .Where(t => t.UserName == userName)
+                                .ToList();
+            }
+            catch (Exception exp)
+            {
+                 _logger.LogError("Can not get trips with stops from database", exp);
+                return null;
+            }
         }
         public void AddTrip(Trip trip)
         {
             _context.Add(trip);
         }
-        public void AddStop(string tripName, Stop newStop)
+        public void AddStop(string tripName, string userName, Stop newStop)
         {
-            var trip = GetTripByName(tripName);
+            var trip = GetTripByName(tripName, userName);
             if(trip !=null)
             {
                 trip.Stops.Add(newStop);
