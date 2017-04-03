@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 
 using TheWorld.ViewModels;
 using TheWorld.Services;
 using Microsoft.Extensions.Configuration;
 using TheWorld.Models;
+using Microsoft.Extensions.Logging;
+using System;
 
 namespace TheWorld.Controllers.Web
 {
@@ -17,18 +16,28 @@ namespace TheWorld.Controllers.Web
         private IConfigurationRoot _config;
         //private WorldContext _context;
         private IWorldRepository _repository;
-        public AppController(IMailService mailService, IConfigurationRoot config, IWorldRepository repository)
+        private ILogger _logger;
+        public AppController(IMailService mailService, IConfigurationRoot config, 
+            IWorldRepository repository, ILogger<AppController> logger)
         {
             _mailService = mailService;
             _config = config;
             _repository = repository;
+            _logger = logger;
         }
         public IActionResult Index()
         {
+            try{
             //var data = _context.Trips.ToList();
             IEnumerable<Trip> data = NewMethod();
 
             return View(data);
+            }
+            catch(Exception exp)
+            {
+                _logger.LogError($"Failed to get trips in Index page:{exp.Message}");
+                return Redirect("/error");
+            }
         }
 
         private IEnumerable<Trip> NewMethod()

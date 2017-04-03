@@ -97,11 +97,10 @@ namespace TheWorld.Models
                         new Stop() { Order = 53, Latitude =  3.139003, Longitude =  101.686855, Name = "Kuala Lumpor, Malaysia", Arrival = DateTime.Parse("May 7, 2015") },
                         new Stop() { Order = 54, Latitude =  13.727896, Longitude =  100.524123, Name = "Bangkok, Thailand", Arrival = DateTime.Parse("May 24, 2015") },
                         new Stop() { Order = 55, Latitude =  33.748995, Longitude =  -84.387982, Name = "Atlanta, Georgia", Arrival = DateTime.Parse("Jun 17, 2015") },
-
                     }
                 };
-                _context.Trips.Add(usTrip);
-                _context.Stops.AddRange(usTrip.Stops);
+                _context.Trips.Add(worldTrip);
+                _context.Stops.AddRange(worldTrip.Stops);
 
                 await _context.SaveChangesAsync();
             }

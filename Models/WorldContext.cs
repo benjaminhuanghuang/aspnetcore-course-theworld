@@ -6,7 +6,8 @@ namespace TheWorld.Models
     public class WorldContext : DbContext
     {
         private IConfigurationRoot _config;
-        public WorldContext(IConfigurationRoot config, DbContextOptions options) : base(options)
+        public WorldContext(IConfigurationRoot config, DbContextOptions options)
+            : base(options)
         {
             _config = config;
         }

@@ -14,3 +14,14 @@
  $ dotnet ef migrations add init
  $ dotnet ef database update
 
+
+
+## Seed Data
+  services.AddTransient<WorldContextSeedData>();  //DI
+  
+  public void Configure(IApplicationBuilder app, IHostingEnvironment env,
+                                ILoggerFactory loggerFactory, WorldContextSeedData seeder)
+    {
+        ...
+        seeder.EnsureSeedData().Wait();
+    }

@@ -45,6 +45,8 @@ namespace ToDoApp
             services.AddScoped<IWorldRepository, WorldRepository>();
             services.AddTransient<WorldContextSeedData>();
             
+            services.AddLogging();
+
             services.AddMvc();
         }
 
@@ -53,8 +55,8 @@ namespace ToDoApp
                                 ILoggerFactory loggerFactory, WorldContextSeedData seeder)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            // write Debug.Write into log
-            loggerFactory.AddDebug();
+            // write Debug.Write into debug window
+            loggerFactory.AddDebug(LogLevel.Information);
             if (env.IsEnvironment("Development"))
             {
                 app.UseDeveloperExceptionPage();  // Show exception page
@@ -62,6 +64,9 @@ namespace ToDoApp
                 // app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions {
                 //     HotModuleReplacement = true
                 // });
+            }
+            else{
+
             }
             app.UseStaticFiles();
             app.UseMvcWithDefaultRoute();
