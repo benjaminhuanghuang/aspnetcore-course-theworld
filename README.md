@@ -37,5 +37,5 @@
     * Directives
 
 ## AngularJS Routing
-    
+    * Pass parameter to sub view
 
